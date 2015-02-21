@@ -5,13 +5,18 @@
  */
 package management.system;
 
-/**
- *
- * @author lt
- */
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 public interface Person {
-    String name = null;
+    String first_name = null;
+    String last_name = null;//Not sure how to use these?? :S
     
-    public String getName();
-    public void setName(String name);
+    public String getFirstName();
+    public void setFirstName(String firstName);
+    public String getLastName();
+    public void setLastName(String lastName);
+    
+    public int getID();
+    public void setID(int id);
 }
