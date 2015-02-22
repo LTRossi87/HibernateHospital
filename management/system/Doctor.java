@@ -1,9 +1,17 @@
 package management.system;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,7 +23,18 @@ import javax.persistence.Table;
 public class Doctor extends Person{
 
     @Column(name="doctor_specialty")
-    public String specialty;
+    private String specialty;
+    
+    @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name="PATIENT_DOCTOR", 
+            joinColumns = {@JoinColumn(name="doctor_id")},
+            inverseJoinColumns = {@JoinColumn(name="patient_id")})
+    private List<Patient> patients;
+    
+    public Doctor()
+    {
+        patients = new ArrayList<>();
+    }
     
     private enum Specialties {DERMATOLOGY,
                                 NEUROLOGY,
@@ -23,6 +42,15 @@ public class Doctor extends Person{
                                 PSYCHIATRY,
                                 GENERAL_PRACTICE,
                                 FAMILY_PRACTICE}
+    
+    public List<Patient> getDoctors()
+    {
+        return this.patients;
+    }
+    public void setPatient(Patient patient)
+    {
+        patients.add(patient);
+    }
     
     public String getSpecialty()
     {

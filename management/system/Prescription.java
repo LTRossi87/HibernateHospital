@@ -5,10 +5,73 @@
  */
 package management.system;
 
-/**
- *
- * @author lt
- */
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "PRESCRIPTION_INFO")
 public class Prescription {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+    
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+    
+    @Column(name = "Rx_INFO")
+    private String prescription_details;
+    
+    public int getID()
+    {
+        return this.id;
+    }
+    public void setID(int id)
+    {
+        this.id = id;
+    }
+    
+    
+    public Patient getPatient()
+    {
+        return this.patient;
+    }
+    public void setPatient(Patient patient)
+    {
+        this.patient = patient;
+    }
+    
+    
+    public String getRx()
+    {
+        return this.prescription_details;
+    }
+    public void setRx(String rx)
+    {
+        this.prescription_details = rx;
+    }
+    
+    public Doctor getDoctor()
+    {
+        return this.doctor;
+    }
+    public void setDoctor(Doctor doctor)
+    {
+        this.doctor = doctor;
+    }
     
 }

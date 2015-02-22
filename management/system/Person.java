@@ -66,8 +66,4 @@ public class Person {
         patient_to_string.append("\n");
         return patient_to_string.toString();
     }
-
-    public void setDOB(String string) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

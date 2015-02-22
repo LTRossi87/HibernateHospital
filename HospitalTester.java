@@ -9,48 +9,67 @@ public class HospitalTester {
     
     public static void main(String[] args)
     {
-        Person patient = new Patient();
+        Patient patient = new Patient();
+        Prescription prescription = new Prescription();
+        Prescription prescription1 = new Prescription();
+        Appointment appointment = new Appointment();
+        Doctor doctor = new Doctor();
+        
         patient.setFirstName("Brandon");
         patient.setLastName("Rossi");
         patient.setDOB("10/02/1987");
+        prescription.setRx("Happy Meds");
+        prescription1.setRx("Really Happy Meds");
         
-        Person anotherPatient = new Patient();
-        anotherPatient.setFirstName("Anna");
-        anotherPatient.setLastName("Gonzales");
-        anotherPatient.setDOB("10/17/1988");
+        appointment.setAppointmentDate("10/2/2015");
         
-        Doctor doctor = new Doctor();
+        
         doctor.setFirstName("Dr. Ham");
         doctor.setLastName("Hawk");
         boolean spreturn1 = doctor.setSpecialty("O");
         
-        Doctor anotherDoctor = new Doctor();
-        anotherDoctor.setFirstName("Dr. Pork");
-        anotherDoctor.setLastName("Rine");
-        boolean spreturn2 = anotherDoctor.setSpecialty("D");
-        System.out.println(spreturn1 + " " + spreturn2);
-        Session session = null;
+        prescription.setDoctor(doctor);
+        prescription.setPatient(patient);
+        prescription1.setDoctor(doctor);
+        prescription1.setPatient(patient);
+        appointment.setDoctor(doctor);
+        appointment.setPatient(patient);
         
+        doctor.setPatient(patient);
+        
+        
+        
+        patient.setAppointment(appointment);
+        patient.setPrescription(prescription);
+        patient.setPrescription(prescription1);
+        
+        
+        
+        Session session = null;  
         Transaction transaction = null;
-        
+      
         try {
             sessionFactory = HibernateUtil.getSessionFactory();
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             
             session.save(patient);
-            session.save(anotherPatient);
+            
             session.save(doctor);
-            session.save(anotherDoctor);
             
             transaction.commit();
         } 
-        catch (HibernateException hibernateException)
+        catch(HibernateException hibernateException)
         {
             transaction.rollback();
             System.out.println("Transaction is rolled back.");
             hibernateException.printStackTrace();
             
+            
+        }
+        catch(Exception exception)
+        {
+            exception.printStackTrace();
         }
         finally
         {
