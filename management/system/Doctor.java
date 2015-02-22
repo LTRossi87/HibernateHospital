@@ -2,8 +2,6 @@ package management.system;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -14,52 +12,18 @@ import javax.persistence.Table;
     @NamedQuery(name="Doctor.findByName", query="from Doctor where name = :name"),
     @NamedQuery(name="Patient.findBySpecialty", query="from Doctor where specialty = :specialty"),
 })
-public class Doctor implements Person{
+public class Doctor extends Person{
 
-    private int doctor_id;
-    private String doctor_first_name;
-    private String doctor_last_name;
+    @Column(name="doctor_specialty")
     public String specialty;
     
     private enum Specialties {DERMATOLOGY,
-                            NEUROLOGY,
-                            ORTHOPEDIC_SURGERY,
-                            PSYCHIATRY,
-                            GENERAL_PRACTICE,
-                            FAMILY_PRACTICE}
+                                NEUROLOGY,
+                                ORTHOPEDIC_SURGERY,
+                                PSYCHIATRY,
+                                GENERAL_PRACTICE,
+                                FAMILY_PRACTICE}
     
-    @Override
-    @Id
-    @GeneratedValue
-    public int getID() {
-        return this.doctor_id;
-    }
-    @Override
-    public void setID(int id) {
-        this.doctor_id = id;
-    }
-    
-    @Override
-    @Column(name="doctor_first_name")
-    public String getFirstName() {
-        return this.doctor_first_name;
-    }
-    @Override
-    public void setFirstName(String firstName) {
-        this.doctor_first_name = firstName;
-    }
-    
-    @Override
-    @Column(name="doctor_last_name")
-    public String getLastName() {
-        return this.doctor_last_name;
-    }
-    @Override
-    public void setLastName(String lastName) {
-        this.doctor_last_name = lastName;
-    }
-    
-    @Column(name="doctor_specialty")
     public String getSpecialty()
     {
         return this.specialty;

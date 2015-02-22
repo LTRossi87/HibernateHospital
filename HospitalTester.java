@@ -9,12 +9,12 @@ public class HospitalTester {
     
     public static void main(String[] args)
     {
-        Patient patient = new Patient();
+        Person patient = new Patient();
         patient.setFirstName("Brandon");
         patient.setLastName("Rossi");
         patient.setDOB("10/02/1987");
         
-        Patient anotherPatient = new Patient();
+        Person anotherPatient = new Patient();
         anotherPatient.setFirstName("Anna");
         anotherPatient.setLastName("Gonzales");
         anotherPatient.setDOB("10/17/1988");

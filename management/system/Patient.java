@@ -3,8 +3,6 @@ package management.system;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -17,49 +15,12 @@ import javax.persistence.TemporalType;
     @NamedQuery(name="Patient.findByName", query="from Patient where name = :name"),
     @NamedQuery(name="Patient.findByDOB", query="from Patient where dob = :dob"),
 })
-public class Patient implements Person{
-
-    private int patient_id;
-    private String patient_first_name;
-    private String patient_last_name;
-    private Date patient_date_of_birth;
+public class Patient extends Person{
     
-    @Override
-    @Id
-    @GeneratedValue
-    public int getID()
-    {
-        return patient_id;
-    }
-    @Override
-    public void setID(int patientId)
-    {
-        this.patient_id = patientId;
-    }
-    
-    @Override
-    @Column(name="patient_first_name")
-    public String getFirstName() {
-        return this.patient_first_name;
-    }
-    @Override
-    public void setFirstName(String firstName) {
-        this.patient_first_name = firstName;
-    }
-    
-    @Override
-    @Column(name="patient_last_name")
-    public String getLastName() {
-        return this.patient_last_name;
-    }
-
-    @Override
-    public void setLastName(String lastName) {
-        this.patient_last_name = lastName;
-    }
-    
-    @Column(name="patient_dob")
+    @Column(name="date_of_birth")
     @Temporal(TemporalType.DATE)
+    private Date patient_date_of_birth;
+   
     public Date getDOB()
     {
         return this.patient_date_of_birth;
@@ -72,11 +33,11 @@ public class Patient implements Person{
     public String toString()
     {
         StringBuilder patient_to_string = new StringBuilder();
-        patient_to_string.append(patient_id);
+        patient_to_string.append(this.id);
         patient_to_string.append("\n");
-        patient_to_string.append(patient_first_name);
+        patient_to_string.append(this.first_name);
         patient_to_string.append("\n");
-        patient_to_string.append(patient_date_of_birth);
+        patient_to_string.append(this.patient_date_of_birth);
         patient_to_string.append("\n");
         return patient_to_string.toString();
     }
