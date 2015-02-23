@@ -20,30 +20,48 @@ public class HospitalTester {
         patient.setDOB("10/02/1987");
         prescription.setRx("Happy Meds");
         prescription1.setRx("Really Happy Meds");
-        
         appointment.setAppointmentDate("10/2/2015");
-        
-        
         doctor.setFirstName("Dr. Ham");
         doctor.setLastName("Hawk");
         boolean spreturn1 = doctor.setSpecialty("O");
-        
         prescription.setDoctor(doctor);
         prescription.setPatient(patient);
         prescription1.setDoctor(doctor);
         prescription1.setPatient(patient);
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
-        
         doctor.setPatient(patient);
-        
-        
-        
         patient.setAppointment(appointment);
         patient.setPrescription(prescription);
         patient.setPrescription(prescription1);
         
         
+        Patient anotherPatient = new Patient();
+        Prescription anotherPrescription = new Prescription();
+        Prescription anotherPrescription1 = new Prescription();
+        Appointment anotherAppointment = new Appointment();
+        Doctor anotherDoctor = new Doctor();
+        
+        anotherPatient.setFirstName("Anna");
+        anotherPatient.setLastName("Gonzales");
+        anotherPatient.setDOB("10/17/1987");
+        anotherPrescription.setRx("Supper Meds");
+        anotherPrescription1.setRx("Really Supper Meds");
+        anotherAppointment.setAppointmentDate("10/17/2015");
+        anotherDoctor.setFirstName("Dr. Prok");
+        anotherDoctor.setLastName("Rine");
+        boolean spreturn2 = anotherDoctor.setSpecialty("F");
+        anotherPrescription.setDoctor(anotherDoctor);
+        anotherPrescription1.setDoctor(doctor);
+        anotherPrescription.setPatient(anotherPatient);
+        anotherPrescription1.setPatient(anotherPatient);
+        doctor.setPatient(anotherPatient);
+        anotherDoctor.setPatient(anotherPatient);
+        anotherAppointment.setDoctor(anotherDoctor);
+        anotherAppointment.setPatient(anotherPatient);
+        anotherPatient.setAppointment(anotherAppointment);
+        anotherPatient.setPrescription(anotherPrescription);
+        anotherPatient.setPrescription(anotherPrescription1);
         
         Session session = null;  
         Transaction transaction = null;
@@ -53,9 +71,10 @@ public class HospitalTester {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
             
-            session.save(patient);
-            
+            session.save(patient);            
             session.save(doctor);
+            session.save(anotherDoctor);
+            session.save(anotherPatient);
             
             transaction.commit();
         } 
