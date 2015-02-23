@@ -28,10 +28,10 @@
  
         <!-- Mention here all the model classes along with their package name -->
         
-        <mapping class="management.system.Prescription"/>
-        <mapping class="management.system.Appointment"/>
-        <mapping class="management.system.Doctor"/>
-        <mapping class="management.system.Patient"/>
+        <mapping class="management.model.Prescription"/>
+        <mapping class="management.model.Appointment"/>
+        <mapping class="management.model.Doctor"/>
+        <mapping class="management.model.Patient"/>
     
     </session-factory>
 </hibernate-configuration>

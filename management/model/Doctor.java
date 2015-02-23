@@ -1,4 +1,4 @@
-package management.system;
+package management.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Table(name="DOCTOR_INFO")
 @NamedQueries({
     @NamedQuery(name="Doctor.findByName", query="from Doctor where name = :name"),
-    @NamedQuery(name="Patient.findBySpecialty", query="from Doctor where specialty = :specialty"),
+    @NamedQuery(name="Patient.findBySpecialty", query="from Doctor where name = :name and specialty = :specialty"),
 })
 public class Doctor extends Person{
 

@@ -1,4 +1,4 @@
-package management.system;
+package management.utils;
 
 import org.hibernate.*;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

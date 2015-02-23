@@ -1,4 +1,4 @@
-package management.system;
+package management.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 @Table(name="PATIENT_INFO")
 @NamedQueries({
     @NamedQuery(name="Patient.findByName", query="from Patient where name = :name"),
-    @NamedQuery(name="Patient.findByDOB", query="from Patient where dob = :dob"),
+    @NamedQuery(name="Patient.findByDOB", query="from Patient where name = :name and dob = :dob"),
 })
 public class Patient extends Person{
     

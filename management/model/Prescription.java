@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package management.system;
+package management.model;
 
-import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,20 +14,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "APPOINTMENT_INFO")
-public class Appointment {
+@Table(name = "PRESCRIPTION_INFO")
+public class Prescription {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
     
     
     @ManyToOne(fetch = FetchType.LAZY)
@@ -35,25 +29,20 @@ public class Appointment {
     private Patient patient;
     
     
-    @Temporal(TemporalType.DATE)
-    private Date appointment_date;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
     
-    public int getId()
+    @Column(name = "Rx_INFO")
+    private String prescription_details;
+    
+    public int getID()
     {
         return this.id;
     }
-    public void setId(int id)
+    public void setID(int id)
     {
         this.id = id;
-    }
-    
-    public Doctor getDoctor()
-    {
-        return this.doctor;
-    }
-    public void setDoctor(Doctor doctor)
-    {
-        this.doctor = doctor;
     }
     
     
@@ -67,12 +56,22 @@ public class Appointment {
     }
     
     
-    public Date getAppointmentDate()
+    public String getRx()
     {
-        return this.appointment_date;
+        return this.prescription_details;
     }
-    public void setAppointmentDate(String appointment_date)
+    public void setRx(String rx)
     {
-        this.appointment_date = new Date(appointment_date);
+        this.prescription_details = rx;
     }
+    
+    public Doctor getDoctor()
+    {
+        return this.doctor;
+    }
+    public void setDoctor(Doctor doctor)
+    {
+        this.doctor = doctor;
+    }
+    
 }

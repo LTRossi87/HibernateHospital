@@ -1,4 +1,8 @@
-import management.system.*;
+import management.model.Doctor;
+import management.model.Prescription;
+import management.model.Appointment;
+import management.model.Patient;
+import management.utils.HibernateUtil;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -72,6 +76,7 @@ public class HospitalTester {
             transaction = session.beginTransaction();
             
             session.save(patient);            
+            
             session.save(doctor);
             session.save(anotherDoctor);
             session.save(anotherPatient);
