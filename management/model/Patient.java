@@ -35,11 +35,12 @@ public class Patient extends Person{
             inverseJoinColumns = {@JoinColumn(name="doctor_id")})
     private List<Doctor> doctors;
 
-    
-    @OneToMany(mappedBy = "patient",targetEntity = Prescription.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "PATIENT_PRESCRIPTIONS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "prescription_id"))
     private List<Prescription> prescriptions;
     
-    @OneToMany(mappedBy = "patient", targetEntity = Appointment.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "PATIENT_APPOINTMENTS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "appointment_id"))
     private List<Appointment> appointments;
     
     public Patient()

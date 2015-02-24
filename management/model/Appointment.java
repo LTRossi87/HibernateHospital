@@ -28,13 +28,7 @@ public class Appointment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
-    
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-    
-    
+   
     @Temporal(TemporalType.DATE)
     private Date appointment_date;
     
@@ -55,17 +49,6 @@ public class Appointment {
     {
         this.doctor = doctor;
     }
-    
-    
-    public Patient getPatient()
-    {
-        return this.patient;
-    }
-    public void setPatient(Patient patient)
-    {
-        this.patient = patient;
-    }
-    
     
     public Date getAppointmentDate()
     {

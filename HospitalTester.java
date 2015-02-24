@@ -29,11 +29,11 @@ public class HospitalTester {
         doctor.setLastName("Hawk");
         boolean spreturn1 = doctor.setSpecialty("O");
         prescription.setDoctor(doctor);
-        prescription.setPatient(patient);
+        
         prescription1.setDoctor(doctor);
-        prescription1.setPatient(patient);
+        
         appointment.setDoctor(doctor);
-        appointment.setPatient(patient);
+        
         doctor.setPatient(patient);
         patient.setAppointment(appointment);
         patient.setPrescription(prescription);
@@ -57,12 +57,9 @@ public class HospitalTester {
         boolean spreturn2 = anotherDoctor.setSpecialty("F");
         anotherPrescription.setDoctor(anotherDoctor);
         anotherPrescription1.setDoctor(doctor);
-        anotherPrescription.setPatient(anotherPatient);
-        anotherPrescription1.setPatient(anotherPatient);
         doctor.setPatient(anotherPatient);
         anotherDoctor.setPatient(anotherPatient);
         anotherAppointment.setDoctor(anotherDoctor);
-        anotherAppointment.setPatient(anotherPatient);
         anotherPatient.setAppointment(anotherAppointment);
         anotherPatient.setPrescription(anotherPrescription);
         anotherPatient.setPrescription(anotherPrescription1);

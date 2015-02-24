@@ -23,12 +23,6 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "patient_id")
-    private Patient patient;
-    
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
@@ -44,17 +38,6 @@ public class Prescription {
     {
         this.id = id;
     }
-    
-    
-    public Patient getPatient()
-    {
-        return this.patient;
-    }
-    public void setPatient(Patient patient)
-    {
-        this.patient = patient;
-    }
-    
     
     public String getRx()
     {
