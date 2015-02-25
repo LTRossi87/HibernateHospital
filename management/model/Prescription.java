@@ -23,13 +23,13 @@ public class Prescription {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
-    
     @Column(name = "Rx_INFO")
     private String prescription_details;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
     public int getID()
     {
         return this.id;
