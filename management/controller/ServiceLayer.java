@@ -155,6 +155,7 @@ public class ServiceLayer
         
         Doctor doctor = medicalDAO.findDoctorByName(doctorFirstName, doctorLastName);
         Patient patient = medicalDAO.findPatient(patientFirstName, patientLastName, patientDateOfBirth);
+
         Prescription prescription = new Prescription();
         prescription.setRx(rX);
         prescription.setDoctor(doctor);
@@ -167,6 +168,30 @@ public class ServiceLayer
         medicalDAO.persistPrescription(prescription);
         
         medicalDAO.closeCurrentSessionWithTransaction();
+    }
+    
+    public boolean isPatientOfDoctor(Doctor doctor, Patient patient)
+    {
+        List<Patient> patients = doctor.getPatients();
+        for(Patient patient1: patients)
+        {
+            if(patient.getFirstName().equalsIgnoreCase(patient1.getFirstName()) &&
+               patient.getLastName().equalsIgnoreCase(patient1.getLastName()) &&
+               patient.getDOB().equalsIgnoreCase(patient1.getDOB()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public List<Doctor> viewAllDoctors()
+    {
+        medicalDAO.openCurrentSessionWithTransaction();
+        List<Doctor> doctors =  medicalDAO.viewAllDoctors();
+        medicalDAO.closeCurrentSessionWithTransaction();
+        return doctors;
+        
     }
     
     public void closeSession()

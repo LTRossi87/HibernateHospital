@@ -19,13 +19,14 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name="Doctor.findByName", query="from Doctor where first_name = :fname and last_name = :lname"),
     @NamedQuery(name="Doctor.findBySpecialty", query="from Doctor where specialty = :specialty"),
+    @NamedQuery(name="Doctor.getAllDoctors", query="from Doctor")
 })
 public class Doctor extends Person{
 
     @Column(name="doctor_specialty")
     private String specialty;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="PATIENT_DOCTOR", 
             joinColumns = {@JoinColumn(name="doctor_id")},
             inverseJoinColumns = {@JoinColumn(name="patient_id")})
@@ -77,7 +78,7 @@ public class Doctor extends Person{
         this.prescriptions.add(prescription);
     }
     
-    public List<Patient> getDoctors()
+    public List<Patient> getPatients()
     {
         return this.patients;
     }
@@ -119,6 +120,16 @@ public class Doctor extends Person{
     }
     public String toString()
     {
-        return "" + this.first_name + " : " +  this.last_name + " : " + this.specialty;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Dr. ");
+        stringBuilder.append(this.getFirstName().toUpperCase());
+        stringBuilder.append(" ");
+        stringBuilder.append(this.getLastName().toUpperCase());
+        stringBuilder.append(", ");
+        stringBuilder.append("Specialty: ");
+        stringBuilder.append(this.getSpecialty());
+        stringBuilder.append("\n");
+        
+        return stringBuilder.toString();
     }
 }

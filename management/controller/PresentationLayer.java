@@ -3,8 +3,10 @@ package management.controller;
 import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 import java.util.List;
 import java.util.Scanner;
+import management.model.Appointment;
 import management.model.Doctor;
 import management.model.Patient;
+import management.model.Prescription;
 
 
 public class PresentationLayer 
@@ -44,6 +46,8 @@ public class PresentationLayer
                               take_user_input = false;
                         break;
                     default: System.out.println("Not A Valid Option");
+                             printMainMenu();
+                        break;
                 }   
             }
         } 
@@ -116,6 +120,8 @@ public class PresentationLayer
                           take_user_input = false;
                     break;
                 default: System.out.println("Not A Valid Option");
+                         printAdministratorMenu();
+                    break;
             }
 
         }
@@ -151,7 +157,12 @@ public class PresentationLayer
                     patientDOB = user_input.next().trim().toLowerCase();
                     System.out.println("Enter Date Of Appointment mm/dd/yyy");
                     appointmentDate = user_input.next().trim().toLowerCase();
-                    serviceLayer.createAppointmentForPatient(patientsFirstName, patientsLastName, patientDOB, doctorsFirstName, doctorsLastName, appointmentDate);
+                    serviceLayer.createAppointmentForPatient(patientsFirstName, 
+                                                             patientsLastName, 
+                                                             patientDOB, 
+                                                             doctorsFirstName, 
+                                                             doctorsLastName, 
+                                                             appointmentDate);
                     printStaffMenu();
                     break;
                 case "d": System.out.println("Delete Not Implemented");
@@ -161,6 +172,8 @@ public class PresentationLayer
                           take_user_input = false;
                     break;
                 default: System.out.println("Not A Valid Option");
+                         printStaffMenu();
+                    break;
             }
 
         }
@@ -168,12 +181,179 @@ public class PresentationLayer
     
     public static void patientMenu(Scanner scanner, ServiceLayer serviceLayer)
     {
-        System.out.println("Patient");
+        boolean take_user_input = true;
+        Scanner user_input = scanner;
+        String input_text = "";
+        String doctorsFirstName;
+        String doctorsLastName;
+        String patientsFirstName;
+        String patientsLastName;
+        String patientDOB;
+        Patient patient;
+        System.out.println("Enter Patients First Name");
+        patientsFirstName = user_input.next().trim().toLowerCase();
+        System.out.println("Enter Patients Last Name");
+        patientsLastName = user_input.next().trim().toLowerCase();
+        System.out.println("Enter Patients Date Of Birth");
+        patientDOB = user_input.next().trim().toLowerCase();
+        patient = serviceLayer.viewPatientAccount(patientsFirstName, patientsLastName, patientDOB);
+        if(patient == null)
+        {
+            System.out.println("Not A Valid Patient");
+            take_user_input = false;
+            printMainMenu();
+        }
+        else
+        {
+            printPatientMenu();
+        }
+        
+        while (take_user_input) 
+        {
+            input_text = user_input.next().trim().toLowerCase();
+            switch (input_text)
+            {
+                case "a": 
+                    List<Appointment> appointments = patient.getAppointments();
+                    for(Appointment appointment: appointments)
+                    {
+                        System.out.println(appointment.toString());
+                    }
+                    printPatientMenu();
+                    break;
+                case "p": 
+                    System.out.println("Enter A Doctors First Name");
+                    doctorsFirstName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Doctors Last Name");
+                    doctorsLastName = user_input.next().trim().toLowerCase();
+                    List<Prescription> prescriptions = patient.getPrescriptions();
+                    for(Prescription prescription: prescriptions)
+                    {
+                        String docFirstName = prescription.getDoctor().getFirstName();
+                        String docLastname = prescription.getDoctor().getLastName();
+                        if(docFirstName.equalsIgnoreCase(doctorsFirstName) && 
+                                docLastname.equalsIgnoreCase(doctorsLastName))
+                        {
+                            System.out.println(prescription.toString());
+                        }
+                    }
+                    printPatientMenu();
+                    break;
+                case "d":
+                    List<Doctor> doctors = serviceLayer.viewAllDoctors();
+                    for(Doctor doctor: doctors)
+                    {
+                        System.out.println(doctor.toString());
+                    }
+                    printPatientMenu();
+                    break;
+                case "b": System.out.println("Returning To Previous Menu");
+                          printMainMenu();
+                          take_user_input = false;
+                    break;
+                default: System.out.println("Not A Valid Option");
+                         printPatientMenu();
+                    break;
+            }
+
+        }
     }
     
     public static void doctorMenu(Scanner scanner, ServiceLayer serviceLayer)
     {
-        System.out.println("Doctor");
+        boolean take_user_input = true;
+        Scanner user_input = scanner;
+        String input_text = "";
+        String doctorsFirstName;
+        String doctorsLastName;
+        String patientsFirstName;
+        String patientsLastName;
+        String patientDOB;
+        String rX;
+        System.out.println("Enter Doctors First Name");
+        doctorsFirstName = user_input.next().trim().toLowerCase();
+        System.out.println("Enter Doctors Last Name");
+        doctorsLastName = user_input.next().trim().toLowerCase();
+        Doctor doctor = serviceLayer.viewDoctorByName(doctorsFirstName, doctorsLastName);
+        if(!isValidDoctor(doctor))
+        {
+            System.out.println("No Such Doctor: " + doctorsFirstName + " " + doctorsLastName);
+            take_user_input = false;
+            printMainMenu();
+        }
+        else
+        {
+            printDoctorMenu();
+        }
+        
+        while (take_user_input) 
+        {
+            input_text = user_input.next().trim().toLowerCase();
+            switch (input_text)
+            {
+                case "v":
+                    List<Patient> patients = doctor.getPatients();
+                    for(Patient patient: patients)
+                    {
+                        System.out.println(patient.toStringForDoctor());
+                    }
+                    printDoctorMenu();
+                    break;
+                case "w":
+                    System.out.println("Enter Patients First Name");
+                    patientsFirstName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter Patients Last Name");
+                    patientsLastName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter Patients Date Of Birth");
+                    patientDOB = user_input.next().trim().toLowerCase();
+                    Patient patient = serviceLayer.viewPatientAccount(patientsFirstName, patientsLastName, patientDOB);
+                    if(!isvalidPatient(patient))
+                    {
+                        System.out.println("Not A Valid Patient" + patientsFirstName + " " + patientsLastName);
+                        printDoctorMenu();
+                        break;
+                    }
+                    if(serviceLayer.isPatientOfDoctor(doctor, patient))
+                    {
+                        System.out.println("Enter Prescription");
+                        rX = user_input.next();
+                        serviceLayer.createPrescription(patientsFirstName, patientsLastName, patientDOB, doctorsFirstName, doctorsLastName, rX);
+                    }
+                    else
+                    {
+                        System.out.println("This Is Not Your Patient."
+                                         + "\nPatient Must First Schedule An Appointment With Doctor");
+                    }
+                    printDoctorMenu();
+                    break;
+                case "b": System.out.println("Returning To Previous Menu");
+                          printMainMenu();
+                          take_user_input = false;
+                    break;
+                default: System.out.println("Not A Valid Option");
+                         printPatientMenu();
+                    break;
+            }
+
+        }
+    }
+    
+    public static boolean isvalidPatient(Patient patient)
+    {
+        if(patient ==  null)
+        {
+            return false;
+        }
+        return true;
+    }
+    
+    public static boolean isValidDoctor(Doctor doctor)
+    {
+        if(doctor ==  null)
+        {
+            return false;
+        }
+        return true;
     }
     
     public static String getSpecialty(String Specialties)
@@ -261,6 +441,21 @@ public class PresentationLayer
          System.out.println("Welcome Staff");
          System.out.println("Please Make A Selection From The Menu Below");
          System.out.println("[C]reate An Appointment, [D]elete An Appointment, [B]ack");
+     }
+     
+     public static void printPatientMenu()
+     {
+         System.out.println("Welcome Patient");
+         System.out.println("Please Make A Selection From The Menu Below");
+         System.out.println("[A]ppointment List, [P]rescription From Doctor, [D]octor's Information, [B]ack");
+     }
+     
+     
+     public static void printDoctorMenu()
+     {
+         System.out.println("Welcome Doctor");
+         System.out.println("Please Make A Selection From The Menu Below");
+         System.out.println("[V]iew Patient Information, [W]rite Prescription, [B]ack");
      }
      
     /**

@@ -21,13 +21,13 @@ public class Person {
     
     @Id
     @GeneratedValue (strategy = GenerationType.TABLE)
-    int id;
+    private int id;
     
     @Column(name="first_name")
-    String first_name;
+    private String first_name;
     
     @Column(name="last_name")
-    String last_name;
+    private String last_name;
     
     public String getFirstName()
     {
@@ -53,17 +53,5 @@ public class Person {
     public void setID(int id)
     {
         this.id = id;
-    }
-    
-    public String toString()
-    {
-        StringBuilder patient_to_string = new StringBuilder();
-        patient_to_string.append(this.id);
-        patient_to_string.append("\n");
-        patient_to_string.append(this.first_name);
-        patient_to_string.append(" ");
-        patient_to_string.append(this.last_name);
-        patient_to_string.append("\n");
-        return patient_to_string.toString();
     }
 }

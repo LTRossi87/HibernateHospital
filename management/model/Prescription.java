@@ -70,4 +70,18 @@ public class Prescription {
         this.doctor = doctor;
     }
     
+    public String toString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        
+        stringBuilder.append("Prescribing Doctor: ");
+        stringBuilder.append(this.getDoctor().toString());
+        stringBuilder.append(" :");
+        stringBuilder.append("Prescribed Medication: ");
+        stringBuilder.append(this.getRx());
+        stringBuilder.append("\n");
+        
+        return stringBuilder.toString();
+    }
+    
 }

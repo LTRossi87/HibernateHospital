@@ -20,7 +20,7 @@ public interface MedicalDAO
     public void persistPatient(Patient patient);
     public void persistAppointment(Appointment appointment);
     public void persistPrescription(Prescription prescription);
-    
+    public List<Doctor> viewAllDoctors();
     public void deleteAppointment(Appointment appointment);
     
     public Patient findPatient(String firstName, String lastName, String dateOfBirth);

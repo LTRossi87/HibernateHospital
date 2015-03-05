@@ -73,4 +73,15 @@ public class Appointment {
     {
         this.appointment_date = appointment_date;
     }
+    
+    public String toString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(":Appointment Scheduled With: ");
+        stringBuilder.append(this.getDoctor().toString());
+        stringBuilder.append("        :On: ");
+        stringBuilder.append(this.getAppointmentDate());        
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
 }

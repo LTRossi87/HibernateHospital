@@ -48,7 +48,6 @@ public class ConcreteMedicalDAO implements MedicalDAO
         query.setString("fname", firstName);
         query.setString("lname", lastName);
         Doctor doctor = (Doctor)query.uniqueResult();
-        System.out.println(doctor.getFirstName());
         return doctor;
     }
 
@@ -84,7 +83,6 @@ public class ConcreteMedicalDAO implements MedicalDAO
         query.setString("lname", lastName);
         query.setString("dob", dateOfBirth);
         Patient patient = (Patient)query.uniqueResult();
-        System.out.println(patient.getFirstName());
         return patient;
     }
 
@@ -130,6 +128,7 @@ public class ConcreteMedicalDAO implements MedicalDAO
         try 
         {
             this.transaction.commit();
+            //this.session.clear();
             this.session.close();
         } 
         catch (HibernateException hibernateException) 
@@ -169,5 +168,13 @@ public class ConcreteMedicalDAO implements MedicalDAO
     @Override
     public void persistPrescription(Prescription prescription) {
         session.save(prescription);
+    }
+
+    @Override
+    public List<Doctor> viewAllDoctors() {
+        Query query;
+        query = session.getNamedQuery("Doctor.getAllDoctors");
+        List<Doctor> doctors = query.list();
+        return doctors;
     }
 }

@@ -92,17 +92,42 @@ public class Patient extends Person{
     public String toString()
     {
         StringBuilder patient_to_string = new StringBuilder();
-        patient_to_string.append(this.id);
+        patient_to_string.append("Patient ID: ");
+        patient_to_string.append(this.getID());
+        patient_to_string.append(", ");
+        patient_to_string.append("Patient Name: ");
+        patient_to_string.append(this.getFirstName().toUpperCase());
+        patient_to_string.append(" ");
+        patient_to_string.append(this.getLastName().toUpperCase());
+        patient_to_string.append(", ");
+        patient_to_string.append("Patient Date Of Birth: ");
+        patient_to_string.append(this.patient_date_of_birth);
+        patient_to_string.append(", ");
+        patient_to_string.append("Patients Appointments: \n");               
+        for(Appointment appointment : appointments)
+        {            
+            patient_to_string.append("    " + appointment.toString());
+        }
         patient_to_string.append("\n");
-        patient_to_string.append(this.first_name);
-        patient_to_string.append("\n");
+        return patient_to_string.toString();
+    }
+    
+    public String toStringForDoctor()
+    {
+        StringBuilder patient_to_string = new StringBuilder();
+        patient_to_string.append("Patient Name: ");
+        patient_to_string.append(this.getFirstName().toUpperCase());
+        patient_to_string.append(" ");
+        patient_to_string.append(this.getLastName().toUpperCase());
+        patient_to_string.append(", ");
+        patient_to_string.append("Date Of Birth: ");
         patient_to_string.append(this.patient_date_of_birth);
         patient_to_string.append("\n");
         for(Appointment appointment : appointments)
-        {
-            patient_to_string.append(appointment.getAppointmentDate());
-            patient_to_string.append(appointment.getDoctor());
+        {            
+            patient_to_string.append("    " + appointment.toString());
         }
+        patient_to_string.append("\n");
         return patient_to_string.toString();
     }
 
