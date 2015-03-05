@@ -1,7 +1,6 @@
 package management.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,8 +13,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="PATIENT_INFO")
@@ -26,21 +23,22 @@ import javax.persistence.TemporalType;
 public class Patient extends Person{
     
     @Column(name="date_of_birth")
-    //@Temporal(TemporalType.DATE)
     private String patient_date_of_birth;
    
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name="PATIENT_DOCTOR", 
             joinColumns = {@JoinColumn(name="patient_id")},
             inverseJoinColumns = {@JoinColumn(name="doctor_id")})
     private List<Doctor> doctors;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "PATIENT_PRESCRIPTIONS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "prescription_id"))
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name = "PATIENT_PRESCRIPTIONS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "prescription_id"))
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "patient", targetEntity = Prescription.class, fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
     
-    @OneToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "PATIENT_APPOINTMENTS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "appointment_id"))
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name = "PATIENT_APPOINTMENTS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "appointment_id"))
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "patient", targetEntity = Appointment.class, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     
     public Patient()
@@ -100,6 +98,11 @@ public class Patient extends Person{
         patient_to_string.append("\n");
         patient_to_string.append(this.patient_date_of_birth);
         patient_to_string.append("\n");
+        for(Appointment appointment : appointments)
+        {
+            patient_to_string.append(appointment.getAppointmentDate());
+            patient_to_string.append(appointment.getDoctor());
+        }
         return patient_to_string.toString();
     }
 

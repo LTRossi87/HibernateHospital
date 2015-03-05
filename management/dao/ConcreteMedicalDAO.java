@@ -1,9 +1,11 @@
 package management.dao;
 import java.util.List;
+import management.model.Appointment;
 
 import management.utils.HibernateUtil;
 import management.model.Doctor;
 import management.model.Patient;
+import management.model.Prescription;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -63,7 +65,8 @@ public class ConcreteMedicalDAO implements MedicalDAO
     @Override
     public void deleteDoctor(Doctor doctor) 
     {
-        session.delete(doctor);
+        
+        session.delete(doctor); 
     }
 
     @Override
@@ -107,6 +110,21 @@ public class ConcreteMedicalDAO implements MedicalDAO
     }
 
     @Override
+    public void deleteAppointment(Appointment appointment)
+    {
+        try
+        {
+            this.session.delete(appointment);
+        }
+        catch(HibernateException hibernateException)
+        {
+            System.out.println("Problem Deleting Appointment");
+            hibernateException.printStackTrace();
+            System.exit(1);
+        }
+    }
+    
+    @Override
     public void closeCurrentSessionWithTransaction() 
     {
         try 
@@ -141,5 +159,15 @@ public class ConcreteMedicalDAO implements MedicalDAO
             System.exit(0);
         }
         
+    }
+
+    @Override
+    public void persistAppointment(Appointment appointment) {
+        session.save(appointment);
+    }
+
+    @Override
+    public void persistPrescription(Prescription prescription) {
+        session.save(prescription);
     }
 }

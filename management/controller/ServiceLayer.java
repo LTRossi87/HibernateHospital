@@ -110,39 +110,61 @@ public class ServiceLayer
         
         appointment.setAppointmentDate(appointmentDate);
         appointment.setDoctor(doctor);
+        appointment.setPatient(patient);
         patient.setAppointment(appointment);
+        doctor.setAppointments(appointment);
         
         medicalDAO.persistDoctor(doctor);
         medicalDAO.persistPatient(patient);
+        medicalDAO.persistAppointment(appointment);
         
         medicalDAO.closeCurrentSessionWithTransaction();
     }
     
     /*May need to impelement a method fo find the appointments of a patient*/
     
-    public void cancelAppointment(String firstName, String lastName, String dateOfBirth)
+    public void cancelAppointment(String patientFirstName, 
+                                  String patientLastName, 
+                                  String patientDateOfBirth, 
+                                  String appointment_date)
     {
         medicalDAO.openCurrentSessionWithTransaction();
-        //logic to delete an appointment
+        
+        Patient patient = medicalDAO.findPatient(patientFirstName, patientLastName, patientDateOfBirth);
+        List<Appointment> appointments = patient.getAppointments();
+        for(Appointment appointment : appointments)
+        {   
+            if(appointment.getAppointmentDate().equals(appointment_date))
+            { 
+                medicalDAO.deleteAppointment(appointment);
+            }
+        }
+        medicalDAO.persistPatient(patient);
+        
         medicalDAO.closeCurrentSessionWithTransaction();
     }
     
     public void createPrescription(String patientFirstName, 
                                    String patientLastName, 
                                    String patientDateOfBirth,
-                                   Doctor doc,
+                                   String doctorFirstName,
+                                   String doctorLastName,
                                    String rX)
     {
         medicalDAO.openCurrentSessionWithTransaction();
         
-        Doctor doctor = doc;
+        Doctor doctor = medicalDAO.findDoctorByName(doctorFirstName, doctorLastName);
         Patient patient = medicalDAO.findPatient(patientFirstName, patientLastName, patientDateOfBirth);
         Prescription prescription = new Prescription();
         prescription.setRx(rX);
         prescription.setDoctor(doctor);
+        prescription.setPatient(patient);
         patient.setPrescription(prescription);
+        doctor.setPrescriptions(prescription);
         
         medicalDAO.persistPatient(patient);
+        medicalDAO.persistDoctor(doctor);
+        medicalDAO.persistPrescription(prescription);
         
         medicalDAO.closeCurrentSessionWithTransaction();
     }

@@ -1,8 +1,10 @@
 package management.controller;
 
 import com.sun.xml.internal.bind.v2.WellKnownNamespace;
+import java.util.List;
 import java.util.Scanner;
 import management.model.Doctor;
+import management.model.Patient;
 
 
 public class PresentationLayer 
@@ -62,6 +64,9 @@ public class PresentationLayer
         boolean take_user_input = true;
         Scanner user_input = scanner;
         String input_text = "";
+        String firstName;
+        String lastName;
+        String specialty;
         while (take_user_input) 
         {
             input_text = user_input.next().trim().toLowerCase();
@@ -69,19 +74,42 @@ public class PresentationLayer
             {
                 case "c": System.out.println("Create A Doctor");
                         System.out.println("Enter The Doctors First Name");
-                        String firstName = user_input.next().trim().toLowerCase();
+                        firstName = user_input.next().trim().toLowerCase();
                         System.out.println("Enter The Doctors Last Name");
-                        String lastName = user_input.next().trim().toLowerCase();
+                        lastName = user_input.next().trim().toLowerCase();
                         System.out.println("Enter The Doctors Specialty");
-                        String specialty = validateDoctorSpecialties(scanner);
+                        specialty = validateDoctorSpecialties(scanner);
                         serviceLayer.createDoctor(firstName, lastName, specialty);
                         printAdministratorMenu();
                     break;
                 case "s": System.out.println("Search For Doctor By Name");
+                          System.out.println("Enter The Doctors First Name");
+                          firstName = user_input.next().trim().toLowerCase();
+                          System.out.println("Enter The Doctors Last Name");
+                          lastName = user_input.next().trim().toLowerCase();
+                          Doctor doctor = serviceLayer.viewDoctorByName(firstName, lastName);
+                          System.out.println(doctor.toString());
+                          printAdministratorMenu();
                     break;
                 case "v": System.out.println("View Doctor By Specialty");
+                          System.out.println("Enter The Doctors Specialty");
+                          specialty = validateDoctorSpecialties(scanner);
+                          specialty = getSpecialty(specialty);
+                          List<Doctor>  doc = serviceLayer.viewDoctorBySpecialty(specialty);
+                          if(doc.isEmpty())
+                          {
+                              System.out.println("No Doctors With specialty: " + specialty);
+                              printAdministratorMenu();
+                              break;
+                          }
+                          for(Doctor doctor1: doc)
+                          {
+                              System.out.println(doctor1.toString());
+                          }
+                          printAdministratorMenu();
+                          
                     break;
-                case "d": System.out.println("Delete");
+                case "d": System.out.println("Delete Not Implemented");
                     break;
                 case "b": System.out.println("Returning To Previous Menu");
                           printMainMenu();
@@ -95,7 +123,47 @@ public class PresentationLayer
     
     public static void staffMenu(Scanner scanner, ServiceLayer serviceLayer)
     {
-        System.out.println("Staff Menu");
+        printStaffMenu();
+        boolean take_user_input = true;
+        Scanner user_input = scanner;
+        String input_text = "";
+        String doctorsFirstName;
+        String doctorsLastName;
+        String patientsFirstName;
+        String patientsLastName;
+        String appointmentDate;
+        String patientDOB;
+        while (take_user_input) 
+        {
+            input_text = user_input.next().trim().toLowerCase();
+            switch (input_text)
+            {
+                case "c": 
+                    System.out.println("Enter A Doctors First Name");
+                    doctorsFirstName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Doctors Last Name");
+                    doctorsLastName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Patients First Name");
+                    patientsFirstName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Patients Last Name");
+                    patientsLastName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Patients Date Of Birth");
+                    patientDOB = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter Date Of Appointment mm/dd/yyy");
+                    appointmentDate = user_input.next().trim().toLowerCase();
+                    serviceLayer.createAppointmentForPatient(patientsFirstName, patientsLastName, patientDOB, doctorsFirstName, doctorsLastName, appointmentDate);
+                    printStaffMenu();
+                    break;
+                case "d": System.out.println("Delete Not Implemented");
+                    break;
+                case "b": System.out.println("Returning To Previous Menu");
+                          printMainMenu();
+                          take_user_input = false;
+                    break;
+                default: System.out.println("Not A Valid Option");
+            }
+
+        }
     }
     
     public static void patientMenu(Scanner scanner, ServiceLayer serviceLayer)
@@ -106,6 +174,29 @@ public class PresentationLayer
     public static void doctorMenu(Scanner scanner, ServiceLayer serviceLayer)
     {
         System.out.println("Doctor");
+    }
+    
+    public static String getSpecialty(String Specialties)
+    {
+
+        String returnSpecialty = "";
+        switch(Specialties)
+            {
+                case "d": returnSpecialty = "DERMATOLOGY";
+                    break;
+                case "n": returnSpecialty = "NEUROLOGY";
+                    break;
+                case "o": returnSpecialty = "ORTHOPEDIC_SURGERY";
+                    break;
+                case "p": returnSpecialty = "PSYCHIATRY";
+                    break;
+                case "g": returnSpecialty = "GENERAL_PRACTICE";
+                    break;
+                case "f": returnSpecialty = "FAMILY_PRACTICE";
+                    break;
+                            
+            }
+        return returnSpecialty;
     }
     
     public static String validateDoctorSpecialties(Scanner scanner)
@@ -165,6 +256,12 @@ public class PresentationLayer
         System.out.println("[D]ERMATOLOGY, [N]EUROLOGY, [O]RTHOPEDIC_SURGERY,\n"
                          + "[P]SYCHIATRY, [G]ENERAL_PRACTICE, [F]AMILY_PRACTICE");
     }
+     public static void printStaffMenu()
+     {
+         System.out.println("Welcome Staff");
+         System.out.println("Please Make A Selection From The Menu Below");
+         System.out.println("[C]reate An Appointment, [D]elete An Appointment, [B]ack");
+     }
      
     /**
      * Used to Initialize the Database
@@ -172,43 +269,48 @@ public class PresentationLayer
      */
     public static void setupDatabase(ServiceLayer serviceLayer)
     {
-        serviceLayer.createDoctor("Ham", "Hawk", "o");
-        serviceLayer.createDoctor("Pork", "Rine", "f");
-        serviceLayer.createDoctor("Sally", "White", "d");
-        serviceLayer.createDoctor("Will", "Smith", "n");
-        serviceLayer.createDoctor("Dummy", "Doctor", "g");
+        serviceLayer.createDoctor("ham", "hawk", "o");
+        serviceLayer.createDoctor("pork", "rine", "f");
+        serviceLayer.createDoctor("sally", "white", "d");
+        serviceLayer.createDoctor("will", "smith", "n");
+        serviceLayer.createDoctor("dummy", "doctor", "g");
         
-        serviceLayer.createPatient("Brandon", "Rossi", "10/02/1987");
-        serviceLayer.createPatient("Anna", "Gonzales", "10/17/1988");
-        serviceLayer.createPatient("Austin", "Merritt", "06/26/1981");
-        serviceLayer.createPatient("Amber", "Stephen", "10/14/1978");
-        serviceLayer.createPatient("Dummy", "Patient", "10/10/1910");
+        serviceLayer.createPatient("brandon", "rossi", "10/02/1987");
+        serviceLayer.createPatient("anna", "gonzales", "10/17/1988");
+        serviceLayer.createPatient("austin", "merritt", "06/26/1981");
+        serviceLayer.createPatient("amber", "stephen", "10/14/1978");
+        serviceLayer.createPatient("dummy", "patient", "10/10/1910");
         
-        Doctor doctor;
-        /*One Patient One Doctor One Appointment One Prescription*/
-        serviceLayer.createAppointmentForPatient("Brandon", "Rossi", "10/02/1987", "Ham", "Hawk", "10/02/1987");        
-        doctor = serviceLayer.viewDoctorByName("Ham", "Hawk");
-        serviceLayer.createPrescription("Brandon", "Rossi", "10/02/1987", doctor, "Happy Meds");
         
         /*One Patient One Doctor One Appointment One Prescription*/
-        serviceLayer.createAppointmentForPatient("Anna", "Gonzales", "10/17/1988", "Sally", "White", "12/05/2016");
-        doctor = serviceLayer.viewDoctorByName("Sally", "White");
-        serviceLayer.createPrescription("Anna", "Gonzales", "10/17/1988", doctor, "Skin So Nice");
+        serviceLayer.createAppointmentForPatient("brandon", "rossi", "10/02/1987", "ham", "hawk", "10/02/1987");        
+        
+        serviceLayer.createPrescription("brandon", "rossi", "10/02/1987", "ham", "hawk", "Happy Meds");
+        
+        /*One Patient One Doctor One Appointment One Prescription*/
+        serviceLayer.createAppointmentForPatient("anna", "gonzales", "10/17/1988", "sally", "white", "12/05/2016");
+        
+        serviceLayer.createPrescription("anna", "gonzales", "10/17/1988", "sally", "white", "Skin So Nice");
         
         /*One Patient Two Doctor Two Appointment Two Prescription*/
-        serviceLayer.createAppointmentForPatient("Austin", "Merritt", "06/26/1981", "Will", "Smith", "01/16/2016");
-        doctor = serviceLayer.viewDoctorByName("Will", "Smith");
-        serviceLayer.createPrescription("Austin", "Merritt", "06/26/1981", doctor, "Headache Be Gone");
-        serviceLayer.createAppointmentForPatient("Austin", "Merritt", "06/26/1981", "Pork", "Rine", "05/04/2015");
-        doctor = serviceLayer.viewDoctorByName("Pork", "Rine");
-        serviceLayer.createPrescription("Austin", "Merritt", "06/26/1981", doctor, "Itch Relief");
+        serviceLayer.createAppointmentForPatient("austin", "merritt", "06/26/1981", "will", "smith", "01/16/2016");
+        
+        serviceLayer.createPrescription("austin", "merritt", "06/26/1981", "Will", "smith", "Headache Be Gone");
+        serviceLayer.createAppointmentForPatient("austin", "merritt", "06/26/1981", "pork", "rine", "05/04/2015");
+          
+        serviceLayer.createPrescription("austin", "merritt", "06/26/1981", "pork", "rine", "Itch Relief");
         
         /*One Patient Two Doctor Two Appointment Two Prescription*/
-        serviceLayer.createAppointmentForPatient("Amber", "Stephen", "10/14/1978", "Sally", "White", "06/15/2017");
-        doctor = serviceLayer.viewDoctorByName("Sally", "White");
-        serviceLayer.createPrescription("Amber", "Stephen", "10/14/1978", doctor, "Smooth Face Cream");
-        serviceLayer.createAppointmentForPatient("Amber", "Stephen", "10/14/1978", "Ham", "Hawk", "07/21/2015");
-        doctor = serviceLayer.viewDoctorByName("Ham", "Hawk");
-        serviceLayer.createPrescription("Amber", "Stephen", "10/14/1978", doctor, "Joint Lubricant");  
+        serviceLayer.createAppointmentForPatient("amber", "stephen", "10/14/1978", "sally", "white", "06/15/2017");
+        
+        serviceLayer.createPrescription("amber", "stephen", "10/14/1978", "sally", "white", "Smooth Face Cream");
+        serviceLayer.createAppointmentForPatient("amber", "stephen", "10/14/1978", "ham", "hawk", "07/21/2015");
+        
+        serviceLayer.createPrescription("amber", "stephen", "10/14/1978", "ham", "hawk", "Joint Lubricant");  
+        
+        //serviceLayer.cancelAppointment("Brandon", "Rossi", "10/02/1987", "10/02/1987");
+        //serviceLayer.deleteDoctor("Pork", "Rine");
+        
+        
     }
 }

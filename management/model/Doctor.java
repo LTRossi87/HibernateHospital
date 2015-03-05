@@ -5,11 +5,13 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -23,15 +25,31 @@ public class Doctor extends Person{
     @Column(name="doctor_specialty")
     private String specialty;
     
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name="PATIENT_DOCTOR", 
             joinColumns = {@JoinColumn(name="doctor_id")},
             inverseJoinColumns = {@JoinColumn(name="patient_id")})
     private List<Patient> patients;
     
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name="DOCTOR_APPOINTMENTS", 
+//            joinColumns = {@JoinColumn(name="doctor_id")},
+//            inverseJoinColumns = {@JoinColumn(name="appointment_id")})
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "doctor", targetEntity = Appointment.class, fetch = FetchType.EAGER)
+    private List<Appointment> appointments;
+    
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinTable(name="DOCTOR_PRESCRIPTIONS", 
+//            joinColumns = {@JoinColumn(name="doctor_id")},
+//            inverseJoinColumns = {@JoinColumn(name="appointment_id")})
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "doctor", targetEntity = Prescription.class, fetch = FetchType.EAGER)
+    private List<Prescription> prescriptions;
+    
     public Doctor()
     {
         patients = new ArrayList<>();
+        appointments = new ArrayList<>();
+        prescriptions = new ArrayList<>();
     }
     
     private enum Specialties {DERMATOLOGY,
@@ -40,6 +58,24 @@ public class Doctor extends Person{
                                 PSYCHIATRY,
                                 GENERAL_PRACTICE,
                                 FAMILY_PRACTICE}
+    
+    public List<Appointment> getAppointments()
+    {
+        return this.appointments;
+    }
+    public void setAppointments(Appointment appointment)
+    {
+        this.appointments.add(appointment);
+    }
+    
+    public List<Prescription> getPrescriptions()
+    {
+        return this.prescriptions;
+    }
+    public void setPrescriptions(Prescription prescription)
+    {
+        this.prescriptions.add(prescription);
+    }
     
     public List<Patient> getDoctors()
     {
@@ -83,6 +119,6 @@ public class Doctor extends Person{
     }
     public String toString()
     {
-        return "";
+        return "" + this.first_name + " : " +  this.last_name + " : " + this.specialty;
     }
 }

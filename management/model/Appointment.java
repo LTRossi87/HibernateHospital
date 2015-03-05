@@ -6,6 +6,7 @@
 package management.model;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -25,13 +26,27 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-    @Temporal(TemporalType.DATE)
-    private Date appointment_date;
+    //@Temporal(TemporalType.DATE)
+    private String appointment_date;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
    
+    
+    public Patient getPatient()
+    {
+        return this.patient;
+    }
+    public void setPatient(Patient patient)
+    {
+        this.patient = patient;
+    }
+    
     public int getId()
     {
         return this.id;
@@ -50,12 +65,12 @@ public class Appointment {
         this.doctor = doctor;
     }
     
-    public Date getAppointmentDate()
+    public String getAppointmentDate()
     {
         return this.appointment_date;
     }
     public void setAppointmentDate(String appointment_date)
     {
-        this.appointment_date = new Date(appointment_date);
+        this.appointment_date = appointment_date;
     }
 }

@@ -26,10 +26,23 @@ public class Prescription {
     @Column(name = "Rx_INFO")
     private String prescription_details;
     
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_id")
+    private Patient patient;
+    
+    public Patient getPatient()
+    {
+        return this.patient;
+    }
+    public void setPatient(Patient patient)
+    {
+        this.patient = patient;
+    }
+    
     public int getID()
     {
         return this.id;
