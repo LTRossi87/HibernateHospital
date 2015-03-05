@@ -1,33 +1,26 @@
 
 package management.dao;
 
+import java.util.List;
+import management.model.Doctor;
+import management.model.Patient;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+
 public interface MedicalDAO 
 {
-    /*Administrator*/
-    public  void createDoctorAccount();
-    public  void viewDoctorAccountByName();
-    public  void viewDoctorAccountBySpecialty();
-    public  void deleteDoctorAccount();
-    public  void createPatientAccount();
-    public  void viewPatientAccountByName();
-    public  void viewPatientAccountByDOB();
-    public  void deletePatientAccountByName();
-    public void deletePatientAccointByDOB();
+    public void persistDoctor(Doctor doctor);
     
-    /*Staff*/
-    public  void createPatientAppointment();
-    public  void canclePatientAppointment(); 
+    public Doctor findDoctorByName(String firstName, String lastName);
+    public List<Doctor> findDoctorBySpecialty(String specialty);
+    public void deleteDoctor(Doctor doctor);
     
-    /*Doctor*/
-    public void viewPatientInformation();
-    public void createPrescriptionForPatient();
+    public void persistPatient(Patient patient);
     
-    /*Patient*/
-    public void vewAppointmentList();
-    public void viewPrescriptionsByDoctor();
-    public void viewDoctorsInformation();
+    public Patient findPatient(String firstName, String lastName, String dateOfBirth);
+    public void deletePatient(Patient patient);
     
-    
-    
-    
+    public void openCurrentSessionWithTransaction();
+    public void closeCurrentSessionWithTransaction();
+    public void closeSessionFactory();
 }

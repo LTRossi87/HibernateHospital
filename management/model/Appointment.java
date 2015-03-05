@@ -25,13 +25,13 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
+    @Temporal(TemporalType.DATE)
+    private Date appointment_date;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
    
-    @Temporal(TemporalType.DATE)
-    private Date appointment_date;
-    
     public int getId()
     {
         return this.id;

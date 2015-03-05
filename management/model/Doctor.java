@@ -15,8 +15,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="DOCTOR_INFO")
 @NamedQueries({
-    @NamedQuery(name="Doctor.findByName", query="from Doctor where name = :name"),
-    @NamedQuery(name="Patient.findBySpecialty", query="from Doctor where name = :name and specialty = :specialty"),
+    @NamedQuery(name="Doctor.findByName", query="from Doctor where first_name = :fname and last_name = :lname"),
+    @NamedQuery(name="Doctor.findBySpecialty", query="from Doctor where specialty = :specialty"),
 })
 public class Doctor extends Person{
 
@@ -80,5 +80,9 @@ public class Doctor extends Person{
             case "f": this.specialty = Specialties.FAMILY_PRACTICE.toString();
         }
         return true;
+    }
+    public String toString()
+    {
+        return "";
     }
 }
