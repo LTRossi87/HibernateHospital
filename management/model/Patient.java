@@ -20,14 +20,14 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="PATIENT_INFO")
 @NamedQueries({
-    @NamedQuery(name="Patient.findByNameAndDOB", 
-                query="from Patient where first_name = :fname and last_name = :lname and date_of_birth = :dob")
+    @NamedQuery(name="Patient.findByName", query="from Patient where name = :name"),
+    @NamedQuery(name="Patient.findByDOB", query="from Patient where name = :name and dob = :dob"),
 })
 public class Patient extends Person{
     
     @Column(name="date_of_birth")
-    //@Temporal(TemporalType.DATE)
-    private String patient_date_of_birth;
+    @Temporal(TemporalType.DATE)
+    private Date patient_date_of_birth;
    
     @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name="PATIENT_DOCTOR", 
@@ -48,11 +48,6 @@ public class Patient extends Person{
         doctors = new ArrayList<>();
         prescriptions = new ArrayList<>();
         appointments = new ArrayList<>();
-    }
-    
-    public void cancelAppointment()//Need to have a paramater here... Not sure what though...
-    {
-        //Implement the deletion of an appointment from the list of appointments
     }
     
     public List<Appointment> getAppointments()
@@ -82,13 +77,13 @@ public class Patient extends Person{
         this.doctors.add(doctor);
     }
     
-    public String getDOB()
+    public Date getDOB()
     {
         return this.patient_date_of_birth;
     }
     public void setDOB(String dob)
     {
-        this.patient_date_of_birth = dob;
+        this.patient_date_of_birth = new Date(dob);
     }
     
     public String toString()
