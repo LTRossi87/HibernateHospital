@@ -21,12 +21,12 @@ public interface MedicalDAO
     public void persistAppointment(Appointment appointment);
     public void persistPrescription(Prescription prescription);
     public List<Doctor> viewAllDoctors();
-    public void deleteAppointment(Appointment appointment);
+    public void deleteAppointment(int id);//Appointment appointment);
     
     public Patient findPatient(String firstName, String lastName, String dateOfBirth);
     public void deletePatient(Patient patient);
     
     public void openCurrentSessionWithTransaction();
     public void closeCurrentSessionWithTransaction();
-    public void closeSessionFactory();
+    public void closeSessionFactory();        
 }

@@ -28,30 +28,34 @@ public class Person {
     
     @Column(name="last_name")
     private String last_name;
-    
-    public String getFirstName()
-    {
-        return this.first_name;
+
+    public String getFirst_name() {
+        return first_name;
     }
-    public void setFirstName(String firstName)
-    {  
-        this.first_name = firstName;
-    }
-    public String getLastName()
-    {
-        return this.last_name;
-    }
-    public void setLastName(String lastName)
-    {
-        this.last_name = lastName;
-    }
-    
-    public int getID()
-    {
-        return this.id;
-    }
-    public void setID(int id)
-    {
+
+    public void setId(int id) {
         this.id = id;
     }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+    
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+    
+    
+    
+
+
+    
 }

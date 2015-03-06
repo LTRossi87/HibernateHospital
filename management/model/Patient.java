@@ -13,6 +13,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name="PATIENT_INFO")
@@ -23,21 +24,17 @@ import javax.persistence.Table;
 public class Patient extends Person{
     
     @Column(name="date_of_birth")
-    private String patient_date_of_birth;
+    private String dob;
    
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="PATIENT_DOCTOR", 
             joinColumns = {@JoinColumn(name="patient_id")},
             inverseJoinColumns = {@JoinColumn(name="doctor_id")})
     private List<Doctor> doctors;
 
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinTable(name = "PATIENT_PRESCRIPTIONS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "prescription_id"))
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "patient", targetEntity = Prescription.class, fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
     
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinTable(name = "PATIENT_APPOINTMENTS", joinColumns = @JoinColumn(name = "patient_id"), inverseJoinColumns = @JoinColumn(name = "appointment_id"))
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "patient", targetEntity = Appointment.class, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     
@@ -47,61 +44,75 @@ public class Patient extends Person{
         prescriptions = new ArrayList<>();
         appointments = new ArrayList<>();
     }
-    
-    public void cancelAppointment()//Need to have a paramater here... Not sure what though...
-    {
-        //Implement the deletion of an appointment from the list of appointments
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public List<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public void setDoctors(List<Doctor> doctors) {
+        this.doctors = doctors;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
     
-    public List<Appointment> getAppointments()
-    {
-        return this.appointments;
-    }
+    
+    
+    
+    
+    
     public void setAppointment(Appointment appointment)
     {
         appointments.add(appointment);
-    }
-    
-    public List<Prescription> getPrescriptions()
-    {
-        return this.prescriptions;
     }
     public void setPrescription(Prescription prescription)
     {
         this.prescriptions.add(prescription);
     }
     
-    public List<Doctor> getDoctors()
-    {
-        return this.doctors;
-    }
-    public void setDoctor(Doctor doctor)
+    
+    public void setDoctors(Doctor doctor)
     {
         this.doctors.add(doctor);
     }
     
-    public String getDOB()
-    {
-        return this.patient_date_of_birth;
-    }
-    public void setDOB(String dob)
-    {
-        this.patient_date_of_birth = dob;
-    }
+    
+    
     
     public String toString()
     {
         StringBuilder patient_to_string = new StringBuilder();
         patient_to_string.append("Patient ID: ");
-        patient_to_string.append(this.getID());
+        patient_to_string.append(this.getId());
         patient_to_string.append(", ");
         patient_to_string.append("Patient Name: ");
-        patient_to_string.append(this.getFirstName().toUpperCase());
+        patient_to_string.append(this.getFirst_name().toUpperCase());
         patient_to_string.append(" ");
-        patient_to_string.append(this.getLastName().toUpperCase());
+        patient_to_string.append(this.getLast_name().toUpperCase());
         patient_to_string.append(", ");
         patient_to_string.append("Patient Date Of Birth: ");
-        patient_to_string.append(this.patient_date_of_birth);
+        patient_to_string.append(this.dob);
         patient_to_string.append(", ");
         patient_to_string.append("Patients Appointments: \n");               
         for(Appointment appointment : appointments)
@@ -116,12 +127,12 @@ public class Patient extends Person{
     {
         StringBuilder patient_to_string = new StringBuilder();
         patient_to_string.append("Patient Name: ");
-        patient_to_string.append(this.getFirstName().toUpperCase());
+        patient_to_string.append(this.getFirst_name().toUpperCase());
         patient_to_string.append(" ");
-        patient_to_string.append(this.getLastName().toUpperCase());
+        patient_to_string.append(this.getLast_name().toUpperCase());
         patient_to_string.append(", ");
         patient_to_string.append("Date Of Birth: ");
-        patient_to_string.append(this.patient_date_of_birth);
+        patient_to_string.append(this.dob);
         patient_to_string.append("\n");
         for(Appointment appointment : appointments)
         {            

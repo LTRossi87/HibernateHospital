@@ -27,22 +27,14 @@ public class Doctor extends Person{
     private String specialty;
     
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="PATIENT_DOCTOR", 
+    @JoinTable(name="PATIENT_DOCTOR",
             joinColumns = {@JoinColumn(name="doctor_id")},
             inverseJoinColumns = {@JoinColumn(name="patient_id")})
     private List<Patient> patients;
     
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinTable(name="DOCTOR_APPOINTMENTS", 
-//            joinColumns = {@JoinColumn(name="doctor_id")},
-//            inverseJoinColumns = {@JoinColumn(name="appointment_id")})
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "doctor", targetEntity = Appointment.class, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
     
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinTable(name="DOCTOR_PRESCRIPTIONS", 
-//            joinColumns = {@JoinColumn(name="doctor_id")},
-//            inverseJoinColumns = {@JoinColumn(name="appointment_id")})
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "doctor", targetEntity = Prescription.class, fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
     
@@ -59,39 +51,52 @@ public class Doctor extends Person{
                                 PSYCHIATRY,
                                 GENERAL_PRACTICE,
                                 FAMILY_PRACTICE}
-    
-    public List<Appointment> getAppointments()
-    {
-        return this.appointments;
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
-    public void setAppointments(Appointment appointment)
+
+    public void setPatients(List<Patient> patients) {
+        this.patients = patients;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public String getSpecialty() {
+       return specialty;
+    }
+    
+    public void setAppointment(Appointment appointment)
     {
         this.appointments.add(appointment);
     }
-    
-    public List<Prescription> getPrescriptions()
-    {
-        return this.prescriptions;
-    }
-    public void setPrescriptions(Prescription prescription)
+    public void setPrescription(Prescription prescription)
     {
         this.prescriptions.add(prescription);
-    }
-    
-    public List<Patient> getPatients()
-    {
-        return this.patients;
     }
     public void setPatient(Patient patient)
     {
         patients.add(patient);
     }
-    
-    public String getSpecialty()
-    {
-        return this.specialty;
-    }
-    public boolean setSpecialty(String input_specialty)
+    public boolean setSpecialties(String input_specialty)
     {
         input_specialty = input_specialty.toLowerCase();
         
@@ -122,9 +127,9 @@ public class Doctor extends Person{
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Dr. ");
-        stringBuilder.append(this.getFirstName().toUpperCase());
+        stringBuilder.append(this.getFirst_name().toUpperCase());
         stringBuilder.append(" ");
-        stringBuilder.append(this.getLastName().toUpperCase());
+        stringBuilder.append(this.getLast_name().toUpperCase());
         stringBuilder.append(", ");
         stringBuilder.append("Specialty: ");
         stringBuilder.append(this.getSpecialty());

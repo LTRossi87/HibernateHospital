@@ -1,7 +1,6 @@
 package management.dao;
 import java.util.List;
 import management.model.Appointment;
-
 import management.utils.HibernateUtil;
 import management.model.Doctor;
 import management.model.Patient;
@@ -16,8 +15,8 @@ public class ConcreteMedicalDAO implements MedicalDAO
 {
 
     private static SessionFactory sessionFactory;
-    private Session session;
-    private Transaction transaction;
+    private static Session session;
+    private static Transaction transaction;
     
     public ConcreteMedicalDAO()
     {
@@ -37,7 +36,9 @@ public class ConcreteMedicalDAO implements MedicalDAO
     @Override
     public void persistDoctor(Doctor doctor) 
     {
+        transaction = session.beginTransaction();
         session.save(doctor);
+        transaction.commit();
     }
 
     @Override
@@ -64,14 +65,17 @@ public class ConcreteMedicalDAO implements MedicalDAO
     @Override
     public void deleteDoctor(Doctor doctor) 
     {
-        
+        transaction = session.beginTransaction();
         session.delete(doctor); 
+        transaction.commit();
     }
 
     @Override
     public void persistPatient(Patient patient) 
     {
+        transaction = session.beginTransaction();
         session.save(patient);
+        transaction.commit();
     }
 
     @Override
@@ -89,30 +93,35 @@ public class ConcreteMedicalDAO implements MedicalDAO
     @Override
     public void deletePatient(Patient patient) 
     {
+        transaction = session.beginTransaction();
         session.delete(patient);
+        transaction.commit();
+    }
+
+     @Override
+    public void persistAppointment(Appointment appointment) {
+        transaction = session.beginTransaction();
+        session.save(appointment);
+        transaction.commit();
     }
 
     @Override
-    public void openCurrentSessionWithTransaction() 
-    {
-        try 
-        {
-            this.session = sessionFactory.openSession();
-            this.transaction = session.beginTransaction();
-        } 
-        catch (HibernateException hibernateException) 
-        {
-            System.out.println("Problem Opening Session or Begining Transaction");
-            System.exit(1);
-        }
+    public void persistPrescription(Prescription prescription) {
+        transaction = session.beginTransaction();
+        session.save(prescription);
+        transaction.commit();
     }
 
     @Override
-    public void deleteAppointment(Appointment appointment)
+    public void deleteAppointment(int id)//Appointment appointment)
     {
         try
         {
-            this.session.delete(appointment);
+            transaction = session.beginTransaction();
+            this.session.clear();
+            Appointment apt = (Appointment)session.get(Appointment.class, id);
+            this.session.delete(apt);
+            transaction.commit();
         }
         catch(HibernateException hibernateException)
         {
@@ -121,14 +130,24 @@ public class ConcreteMedicalDAO implements MedicalDAO
             System.exit(1);
         }
     }
-    
+    @Override
+    public void openCurrentSessionWithTransaction() 
+    {
+        try 
+        {
+            this.session = sessionFactory.openSession();
+        } 
+        catch (HibernateException hibernateException) 
+        {
+            System.out.println("Problem Opening Session or Begining Transaction");
+            System.exit(1);
+        }
+    }
     @Override
     public void closeCurrentSessionWithTransaction() 
     {
         try 
         {
-            this.transaction.commit();
-            //this.session.clear();
             this.session.close();
         } 
         catch (HibernateException hibernateException) 
@@ -156,18 +175,7 @@ public class ConcreteMedicalDAO implements MedicalDAO
         finally
         {
             System.exit(0);
-        }
-        
-    }
-
-    @Override
-    public void persistAppointment(Appointment appointment) {
-        session.save(appointment);
-    }
-
-    @Override
-    public void persistPrescription(Prescription prescription) {
-        session.save(prescription);
+        }  
     }
 
     @Override

@@ -1,6 +1,5 @@
 package management.controller;
 
-import com.sun.xml.internal.bind.v2.WellKnownNamespace;
 import java.util.List;
 import java.util.Scanner;
 import management.model.Appointment;
@@ -24,6 +23,8 @@ public class PresentationLayer
         ServiceLayer serviceLayer = new ServiceLayer();
         try 
         {
+            serviceLayer.openCurrentSession();
+            
             setupDatabase(serviceLayer);
             printMainMenu();
             boolean take_user_input = true;
@@ -58,6 +59,8 @@ public class PresentationLayer
         }
         finally
         {
+            serviceLayer.closeCurrentSession();
+            
             serviceLayer.closeSession();
         }
     }
@@ -71,6 +74,7 @@ public class PresentationLayer
         String firstName;
         String lastName;
         String specialty;
+        String patientDOB;
         while (take_user_input) 
         {
             input_text = user_input.next().trim().toLowerCase();
@@ -114,6 +118,37 @@ public class PresentationLayer
                           
                     break;
                 case "d": System.out.println("Delete Not Implemented");
+                    break;
+                case "cr":
+                           System.out.println("Enter Patients First Name");
+                           firstName = user_input.next().trim().toLowerCase();
+                           System.out.println("Enter Patients Last Name");
+                           lastName = user_input.next().trim().toLowerCase();
+                           System.out.println("Enter Patients Date Of Birth");
+                           patientDOB = user_input.next().trim().toLowerCase();
+                           serviceLayer.createPatient(firstName, lastName, patientDOB);
+                           printAdministratorMenu();
+                    break;
+                case "vi":
+                           System.out.println("Enter Patients First Name");
+                           firstName = user_input.next().trim().toLowerCase();
+                           System.out.println("Enter Patients Last Name");
+                           lastName = user_input.next().trim().toLowerCase();
+                           System.out.println("Enter Patients Date Of Birth");
+                           patientDOB = user_input.next().trim().toLowerCase();
+                           Patient patient = serviceLayer.viewPatientAccount(firstName, lastName, patientDOB);
+                           if(!isvalidPatient(patient))
+                           {
+                                System.out.println("Not A Valid Patient");
+                                take_user_input = false;
+                                printMainMenu(); 
+                           }
+                           System.out.println(patient.toString());
+                           printAdministratorMenu();
+                    break;
+                case "de":
+                           System.out.println("Deleting Not Implemented");
+                           printAdministratorMenu();
                     break;
                 case "b": System.out.println("Returning To Previous Menu");
                           printMainMenu();
@@ -165,7 +200,17 @@ public class PresentationLayer
                                                              appointmentDate);
                     printStaffMenu();
                     break;
-                case "d": System.out.println("Delete Not Implemented");
+                case "d": 
+                    System.out.println("Enter A Patients First Name");
+                    patientsFirstName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Patients Last Name");
+                    patientsLastName = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter A Patients Date Of Birth");
+                    patientDOB = user_input.next().trim().toLowerCase();
+                    System.out.println("Enter Date Of Appointment mm/dd/yyy");
+                    appointmentDate = user_input.next().trim().toLowerCase();
+                    serviceLayer.cancelAppointment(patientsFirstName, patientsLastName, patientDOB, appointmentDate);
+                    printStaffMenu();
                     break;
                 case "b": System.out.println("Returning To Previous Menu");
                           printMainMenu();
@@ -197,7 +242,7 @@ public class PresentationLayer
         System.out.println("Enter Patients Date Of Birth");
         patientDOB = user_input.next().trim().toLowerCase();
         patient = serviceLayer.viewPatientAccount(patientsFirstName, patientsLastName, patientDOB);
-        if(patient == null)
+        if(!isvalidPatient(patient))
         {
             System.out.println("Not A Valid Patient");
             take_user_input = false;
@@ -229,8 +274,8 @@ public class PresentationLayer
                     List<Prescription> prescriptions = patient.getPrescriptions();
                     for(Prescription prescription: prescriptions)
                     {
-                        String docFirstName = prescription.getDoctor().getFirstName();
-                        String docLastname = prescription.getDoctor().getLastName();
+                        String docFirstName = prescription.getDoctors().getFirst_name();
+                        String docLastname = prescription.getDoctors().getLast_name();
                         if(docFirstName.equalsIgnoreCase(doctorsFirstName) && 
                                 docLastname.equalsIgnoreCase(doctorsLastName))
                         {
@@ -427,7 +472,8 @@ public class PresentationLayer
     {
         System.out.println("Welcome Administrator");
         System.out.println("Please Make A Selection From The Menu Below");
-        System.out.println("[C]reate A Doctor, [S]earch For Doctor By Name, [V]iew Doctors By Specialty, [D]elete A Doctor, [B]ack");
+        System.out.println("[C]reate A Doctor, [S]earch For Doctor By Name, [V]iew Doctors By Specialty, [D]elete A Doctor,"
+                         + "\n[Cr]eate A Patient, [Vi]ew Patient Account, [De]lete Patient [B]ack");
     }
      public static void printValidateDoctorSpecialtiesMenu()
     {
@@ -482,29 +528,29 @@ public class PresentationLayer
         
         serviceLayer.createPrescription("brandon", "rossi", "10/02/1987", "ham", "hawk", "Happy Meds");
         
-        /*One Patient One Doctor One Appointment One Prescription*/
-        serviceLayer.createAppointmentForPatient("anna", "gonzales", "10/17/1988", "sally", "white", "12/05/2016");
-        
-        serviceLayer.createPrescription("anna", "gonzales", "10/17/1988", "sally", "white", "Skin So Nice");
-        
-        /*One Patient Two Doctor Two Appointment Two Prescription*/
-        serviceLayer.createAppointmentForPatient("austin", "merritt", "06/26/1981", "will", "smith", "01/16/2016");
-        
-        serviceLayer.createPrescription("austin", "merritt", "06/26/1981", "Will", "smith", "Headache Be Gone");
-        serviceLayer.createAppointmentForPatient("austin", "merritt", "06/26/1981", "pork", "rine", "05/04/2015");
-          
-        serviceLayer.createPrescription("austin", "merritt", "06/26/1981", "pork", "rine", "Itch Relief");
-        
-        /*One Patient Two Doctor Two Appointment Two Prescription*/
-        serviceLayer.createAppointmentForPatient("amber", "stephen", "10/14/1978", "sally", "white", "06/15/2017");
-        
-        serviceLayer.createPrescription("amber", "stephen", "10/14/1978", "sally", "white", "Smooth Face Cream");
-        serviceLayer.createAppointmentForPatient("amber", "stephen", "10/14/1978", "ham", "hawk", "07/21/2015");
-        
-        serviceLayer.createPrescription("amber", "stephen", "10/14/1978", "ham", "hawk", "Joint Lubricant");  
+//        /*One Patient One Doctor One Appointment One Prescription*/
+//        serviceLayer.createAppointmentForPatient("anna", "gonzales", "10/17/1988", "sally", "white", "12/05/2016");
+//        
+//        serviceLayer.createPrescription("anna", "gonzales", "10/17/1988", "sally", "white", "Skin So Nice");
+//        
+//        /*One Patient Two Doctor Two Appointment Two Prescription*/
+//        serviceLayer.createAppointmentForPatient("austin", "merritt", "06/26/1981", "will", "smith", "01/16/2016");
+//        
+//        serviceLayer.createPrescription("austin", "merritt", "06/26/1981", "Will", "smith", "Headache Be Gone");
+//        serviceLayer.createAppointmentForPatient("austin", "merritt", "06/26/1981", "pork", "rine", "05/04/2015");
+//          
+//        serviceLayer.createPrescription("austin", "merritt", "06/26/1981", "pork", "rine", "Itch Relief");
+//        
+//        /*One Patient Two Doctor Two Appointment Two Prescription*/
+//        serviceLayer.createAppointmentForPatient("amber", "stephen", "10/14/1978", "sally", "white", "06/15/2017");
+//        
+//        serviceLayer.createPrescription("amber", "stephen", "10/14/1978", "sally", "white", "Smooth Face Cream");
+//        serviceLayer.createAppointmentForPatient("amber", "stephen", "10/14/1978", "ham", "hawk", "07/21/2015");
+//        
+//        serviceLayer.createPrescription("amber", "stephen", "10/14/1978", "ham", "hawk", "Joint Lubricant");  
         
         //serviceLayer.cancelAppointment("Brandon", "Rossi", "10/02/1987", "10/02/1987");
-        //serviceLayer.deleteDoctor("Pork", "Rine");
+        //serviceLayer.deleteDoctor("ham", "hawk");
         
         
     }
