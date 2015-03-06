@@ -1,4 +1,5 @@
 package management.dao;
+
 import java.util.List;
 import management.model.Appointment;
 import management.utils.HibernateUtil;
@@ -11,50 +12,42 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
 
-public class ConcreteMedicalDAO implements MedicalDAO
-{
+public class ConcreteMedicalDAO implements MedicalDAO {
 
     private static SessionFactory sessionFactory;
     private static Session session;
     private static Transaction transaction;
-    
-    public ConcreteMedicalDAO()
-    {
-        try
-        {
-            this.sessionFactory  = HibernateUtil.getSessionFactory();
-        }
-        catch(HibernateException hibernateException)
-        {
+
+    public ConcreteMedicalDAO() {
+        try {
+            this.sessionFactory = HibernateUtil.getSessionFactory();
+        } catch (HibernateException hibernateException) {
             System.out.println("Problem getting Hibernate Session Factory");
             System.exit(1);
-        } 
+        }
         this.session = null;
         this.transaction = null;
     }
-    
+
     @Override
-    public void persistDoctor(Doctor doctor) 
-    {
+    public void persistDoctor(Doctor doctor) {
         transaction = session.beginTransaction();
         session.save(doctor);
         transaction.commit();
     }
 
     @Override
-    public Doctor findDoctorByName(String firstName, String lastName) 
-    {
+    public Doctor findDoctorByName(String firstName, String lastName) {
         Query query;
         query = session.getNamedQuery("Doctor.findByName");
         query.setString("fname", firstName);
         query.setString("lname", lastName);
-        Doctor doctor = (Doctor)query.uniqueResult();
+        Doctor doctor = (Doctor) query.uniqueResult();
         return doctor;
     }
 
     @Override
-    public List<Doctor> findDoctorBySpecialty(String specialty) 
-    {
+    public List<Doctor> findDoctorBySpecialty(String specialty) {
         Query query;
         query = session.getNamedQuery("Doctor.findBySpecialty");
         query.setString("specialty", specialty);
@@ -63,42 +56,38 @@ public class ConcreteMedicalDAO implements MedicalDAO
     }
 
     @Override
-    public void deleteDoctor(Doctor doctor) 
-    {
+    public void deleteDoctor(Doctor doctor) {
         transaction = session.beginTransaction();
-        session.delete(doctor); 
+        session.delete(doctor);
         transaction.commit();
     }
 
     @Override
-    public void persistPatient(Patient patient) 
-    {
+    public void persistPatient(Patient patient) {
         transaction = session.beginTransaction();
         session.save(patient);
         transaction.commit();
     }
 
     @Override
-    public Patient findPatient(String firstName, String lastName, String dateOfBirth) 
-    {
+    public Patient findPatient(String firstName, String lastName, String dateOfBirth) {
         Query query;
         query = session.getNamedQuery("Patient.findByNameAndDOB");
         query.setString("fname", firstName);
         query.setString("lname", lastName);
         query.setString("dob", dateOfBirth);
-        Patient patient = (Patient)query.uniqueResult();
+        Patient patient = (Patient) query.uniqueResult();
         return patient;
     }
 
     @Override
-    public void deletePatient(Patient patient) 
-    {
+    public void deletePatient(Patient patient) {
         transaction = session.beginTransaction();
         session.delete(patient);
         transaction.commit();
     }
 
-     @Override
+    @Override
     public void persistAppointment(Appointment appointment) {
         transaction = session.beginTransaction();
         session.save(appointment);
@@ -115,67 +104,52 @@ public class ConcreteMedicalDAO implements MedicalDAO
     @Override
     public void deleteAppointment(int id)//Appointment appointment)
     {
-        try
-        {
+        try {
             transaction = session.beginTransaction();
             this.session.clear();
-            Appointment apt = (Appointment)session.get(Appointment.class, id);
+            Appointment apt = (Appointment) session.get(Appointment.class, id);
             this.session.delete(apt);
             transaction.commit();
-        }
-        catch(HibernateException hibernateException)
-        {
+        } catch (HibernateException hibernateException) {
             System.out.println("Problem Deleting Appointment");
             hibernateException.printStackTrace();
             System.exit(1);
         }
     }
+
     @Override
-    public void openCurrentSessionWithTransaction() 
-    {
-        try 
-        {
+    public void openCurrentSessionWithTransaction() {
+        try {
             this.session = sessionFactory.openSession();
-        } 
-        catch (HibernateException hibernateException) 
-        {
+        } catch (HibernateException hibernateException) {
             System.out.println("Problem Opening Session or Begining Transaction");
             System.exit(1);
         }
     }
+
     @Override
-    public void closeCurrentSessionWithTransaction() 
-    {
-        try 
-        {
+    public void closeCurrentSessionWithTransaction() {
+        try {
             this.session.close();
-        } 
-        catch (HibernateException hibernateException) 
-        {
+        } catch (HibernateException hibernateException) {
             System.out.println("Problem Commiting Transaction or Closing Session");
             transaction.rollback();
             hibernateException.printStackTrace();
             System.exit(1);
         }
-        
+
     }
-    
+
     @Override
-    public void closeSessionFactory()
-    {
-        try 
-        {
+    public void closeSessionFactory() {
+        try {
             this.sessionFactory.close();
-        } 
-        catch (HibernateException hibernateException)
-        {
+        } catch (HibernateException hibernateException) {
             System.out.println("Problem Closing Session Factory");
             System.exit(1);
-        }
-        finally
-        {
+        } finally {
             System.exit(0);
-        }  
+        }
     }
 
     @Override

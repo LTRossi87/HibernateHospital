@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package management.model;
 
 import javax.persistence.Column;
@@ -18,14 +13,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PRESCRIPTION_INFO")
 public class Prescription {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    
+
     @Column(name = "Rx_INFO")
     private String rx;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
@@ -65,58 +60,50 @@ public class Prescription {
     public void setRx(String rx) {
         this.rx = rx;
     }
-    
-    
 
-    
-    public Patient getPatients()
-    {
+    public Patient getPatients() {
         return this.patient;
     }
-    public void setPatients(Patient patient)
-    {
+
+    public void setPatients(Patient patient) {
         this.patient = patient;
     }
-    
-    public int getIds()
-    {
+
+    public int getIds() {
         return this.id;
     }
-    public void setIds(int id)
-    {
+
+    public void setIds(int id) {
         this.id = id;
     }
-    
-    public String getRxs()
-    {
+
+    public String getRxs() {
         return this.rx;
     }
-    public void setRxs(String rx)
-    {
+
+    public void setRxs(String rx) {
         this.rx = rx;
     }
-    
-    public Doctor getDoctors()
-    {
+
+    public Doctor getDoctors() {
         return this.doctor;
     }
-    public void setDoctors(Doctor doctor)
-    {
+
+    public void setDoctors(Doctor doctor) {
         this.doctor = doctor;
     }
-    
-    public String toString()
-    {
+
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        
+
         stringBuilder.append("Prescribing Doctor: ");
         stringBuilder.append(this.getDoctors().toString());
         stringBuilder.append(" :");
         stringBuilder.append("Prescribed Medication: ");
         stringBuilder.append(this.getRxs());
         stringBuilder.append("\n");
-        
+
         return stringBuilder.toString();
     }
-    
+
 }

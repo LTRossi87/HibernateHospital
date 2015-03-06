@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package management.model;
 
 import javax.persistence.Column;
@@ -15,18 +10,18 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="PERSON_INFO")
+@Table(name = "PERSON_INFO")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Person {
-    
+
     @Id
-    @GeneratedValue (strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private int id;
-    
-    @Column(name="first_name")
+
+    @Column(name = "first_name")
     private String first_name;
-    
-    @Column(name="last_name")
+
+    @Column(name = "last_name")
     private String last_name;
 
     public String getFirst_name() {
@@ -48,14 +43,9 @@ public class Person {
     public String getLast_name() {
         return last_name;
     }
-    
+
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
     }
-    
-    
-    
 
-
-    
 }

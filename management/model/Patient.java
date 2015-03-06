@@ -13,33 +13,33 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.Cascade;
 
 @Entity
-@Table(name="PATIENT_INFO")
+@Table(name = "PATIENT_INFO")
 @NamedQueries({
-    @NamedQuery(name="Patient.findByNameAndDOB", 
-                query="from Patient where first_name = :fname and last_name = :lname and date_of_birth = :dob")
+    @NamedQuery(name = "Patient.findByNameAndDOB",
+            query = "from Patient where first_name = :fname and last_name = :lname and date_of_birth = :dob")
 })
-public class Patient extends Person{
-    
-    @Column(name="date_of_birth")
+public class Patient extends Person {
+
+    @Column(name = "date_of_birth")
     private String dob;
-   
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="PATIENT_DOCTOR", 
-            joinColumns = {@JoinColumn(name="patient_id")},
-            inverseJoinColumns = {@JoinColumn(name="doctor_id")})
+    @JoinTable(name = "PATIENT_DOCTOR",
+            joinColumns = {
+                @JoinColumn(name = "patient_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "doctor_id")})
     private List<Doctor> doctors;
 
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "patient", targetEntity = Prescription.class, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient", targetEntity = Prescription.class, fetch = FetchType.EAGER)
     private List<Prescription> prescriptions;
-    
-    @OneToMany(cascade=CascadeType.ALL, mappedBy = "patient", targetEntity = Appointment.class, fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient", targetEntity = Appointment.class, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
-    
-    public Patient()
-    {
+
+    public Patient() {
         doctors = new ArrayList<>();
         prescriptions = new ArrayList<>();
         appointments = new ArrayList<>();
@@ -76,32 +76,20 @@ public class Patient extends Person{
     public void setPrescriptions(List<Prescription> prescriptions) {
         this.prescriptions = prescriptions;
     }
-    
-    
-    
-    
-    
-    
-    public void setAppointment(Appointment appointment)
-    {
+
+    public void setAppointment(Appointment appointment) {
         appointments.add(appointment);
     }
-    public void setPrescription(Prescription prescription)
-    {
+
+    public void setPrescription(Prescription prescription) {
         this.prescriptions.add(prescription);
     }
-    
-    
-    public void setDoctors(Doctor doctor)
-    {
+
+    public void setDoctors(Doctor doctor) {
         this.doctors.add(doctor);
     }
-    
-    
-    
-    
-    public String toString()
-    {
+
+    public String toString() {
         StringBuilder patient_to_string = new StringBuilder();
         patient_to_string.append("Patient ID: ");
         patient_to_string.append(this.getId());
@@ -114,17 +102,15 @@ public class Patient extends Person{
         patient_to_string.append("Patient Date Of Birth: ");
         patient_to_string.append(this.dob);
         patient_to_string.append(", ");
-        patient_to_string.append("Patients Appointments: \n");               
-        for(Appointment appointment : appointments)
-        {            
+        patient_to_string.append("Patients Appointments: \n");
+        for (Appointment appointment : appointments) {
             patient_to_string.append("    " + appointment.toString());
         }
         patient_to_string.append("\n");
         return patient_to_string.toString();
     }
-    
-    public String toStringForDoctor()
-    {
+
+    public String toStringForDoctor() {
         StringBuilder patient_to_string = new StringBuilder();
         patient_to_string.append("Patient Name: ");
         patient_to_string.append(this.getFirst_name().toUpperCase());
@@ -134,14 +120,11 @@ public class Patient extends Person{
         patient_to_string.append("Date Of Birth: ");
         patient_to_string.append(this.dob);
         patient_to_string.append("\n");
-        for(Appointment appointment : appointments)
-        {            
+        for (Appointment appointment : appointments) {
             patient_to_string.append("    " + appointment.toString());
         }
         patient_to_string.append("\n");
         return patient_to_string.toString();
     }
 
-    
-    
 }
