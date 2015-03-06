@@ -14,6 +14,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/*
+    Brandon Rossi
+    CS 157B
+    Spring 2015
+    Assignment 1
+*/
+
 @Entity
 @Table(name = "PATIENT_INFO")
 @NamedQueries({

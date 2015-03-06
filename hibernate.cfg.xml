@@ -2,14 +2,17 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
- 
+<!-- Brandon Rossi --> 
+<!-- CS 157B -->
+<!-- Spring 2015 -->
+<!-- Assignment 1 -->
 <hibernate-configuration>
     <session-factory>
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/hospitalManager</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">b021987</property>
+        <property name="connection.username">{UserName}</property>
+        <property name="connection.password">{Password}</property>
         
         <!-- JDBC connection pool (use the built-in) -->
         <property name="connection.pool_size">1</property>

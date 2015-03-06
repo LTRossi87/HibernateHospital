@@ -5,6 +5,12 @@ import management.model.Appointment;
 import management.model.Doctor;
 import management.model.Patient;
 import management.model.Prescription;
+/*
+    Brandon Rossi
+    CS 157B
+    Spring 2015
+    Assignment 1
+*/
 
 public interface MedicalDAO {
 

@@ -12,6 +12,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.Query;
 
+/*
+    Brandon Rossi
+    CS 157B
+    Spring 2015
+    Assignment 1
+*/
+
 public class ConcreteMedicalDAO implements MedicalDAO {
 
     private static SessionFactory sessionFactory;

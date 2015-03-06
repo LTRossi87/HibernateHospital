@@ -9,6 +9,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+/*
+    Brandon Rossi
+    CS 157B
+    Spring 2015
+    Assignment 1
+*/
+
 @Entity
 @Table(name = "PERSON_INFO")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

@@ -8,6 +8,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/*
+    Brandon Rossi
+    CS 157B
+    Spring 2015
+    Assignment 1
+*/
+
 @Entity
 @Table(name = "APPOINTMENT_INFO")
 public class Appointment {
